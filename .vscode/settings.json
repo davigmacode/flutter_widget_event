@@ -1,0 +1,18 @@
+{
+  // Remove .fvm files from search
+  "search.exclude": {
+    "**/.fvm": true
+  },
+  // Remove from file watching
+  "files.watcherExclude": {
+    "**/.fvm": true
+  },
+  "dart.flutterSdkPath": ".fvm/flutter_sdk",
+  "[dart]": {
+    "editor.defaultFormatter": "Dart-Code.dart-code",
+    "editor.formatOnSave": true
+  },
+  "cSpell.words": [
+    "Schyler"
+  ]
+}
