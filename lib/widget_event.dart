@@ -1,7 +1,5 @@
 library widget_event;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'src/event.dart';
+export 'src/mixin.dart';
+export 'src/property.dart';
