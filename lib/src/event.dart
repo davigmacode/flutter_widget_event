@@ -1,6 +1,9 @@
+/// Interactive events that some of the widgets can take on when
+/// receiving input from the user.
+///
+/// Some widgets track their current state in a `Set<WidgetEvent>`.
 class WidgetEvent {
   const WidgetEvent(this.value);
-
   final String value;
 
   /// The state when the user drags their mouse cursor over the given widget.

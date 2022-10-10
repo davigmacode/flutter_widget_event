@@ -34,7 +34,7 @@ import 'event.dart';
 ///     return InkWell(
 ///       onFocusChange: updateWidgetEvent(WidgetEvent.focused),
 ///       child: Container(
-///         color: DrivenProperty.resolve<Color>(widget.color, widgetEvents),
+///         color: DrivenProperty.evaluate<Color>(widget.color, widgetEvents),
 ///         child: widget.child,
 ///       ),
 ///     );
@@ -57,6 +57,7 @@ mixin WidgetEventMixin<T extends StatefulWidget> on State<T> {
   @protected
   Set<WidgetEvent> widgetEvents = <WidgetEvent>{};
 
+  /// Called when [widgetEvents] of this [State] object changes.
   @protected
   void didChangeWidgetEvent() {}
 
@@ -104,8 +105,10 @@ mixin WidgetEventMixin<T extends StatefulWidget> on State<T> {
   /// ```
   /// {@end-tool}
   @protected
-  ValueChanged<bool> updateWidgetEvent(WidgetEvent key,
-      {ValueChanged<bool>? onChanged}) {
+  ValueChanged<bool> updateWidgetEvent(
+    WidgetEvent key, {
+    ValueChanged<bool>? onChanged,
+  }) {
     return (bool value) {
       if (widgetEvents.contains(key) == value) return;
       setWidgetEvent(key, value);
@@ -162,7 +165,9 @@ mixin WidgetEventMixin<T extends StatefulWidget> on State<T> {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<Set<WidgetEvent>>(
-        'widgetEvents', widgetEvents,
-        defaultValue: <WidgetEvent>{}));
+      'widgetEvents',
+      widgetEvents,
+      defaultValue: <WidgetEvent>{},
+    ));
   }
 }
