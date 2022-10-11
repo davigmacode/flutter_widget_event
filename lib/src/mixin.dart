@@ -66,6 +66,7 @@ mixin WidgetEventMixin<T extends StatefulWidget> on State<T> {
 
   void _handleEventsControllerChange() {
     setState(() {});
+    didChangeWidgetEvents();
   }
 
   /// Init widget events with external events controller
@@ -115,6 +116,10 @@ mixin WidgetEventMixin<T extends StatefulWidget> on State<T> {
     _externalController?.removeListener(_handleEventsControllerChange);
     _internalController?.dispose();
   }
+
+  /// Called when [widgetEvents] changes.
+  @protected
+  void didChangeWidgetEvents() {}
 
   @override
   void initState() {

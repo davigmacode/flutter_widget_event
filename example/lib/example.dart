@@ -9,7 +9,7 @@ class MyWidgetEvent extends WidgetEvent {
   static const edited = MyWidgetEvent('edited');
 
   static bool isPressed(Set<WidgetEvent> events) {
-    return events is MyWidgetEvent && events.contains(MyWidgetEvent.edited);
+    return events is MyWidgetEvent && events.contains(MyWidgetEvent.pressed);
   }
 
   static bool isEdited(Set<WidgetEvent> events) {

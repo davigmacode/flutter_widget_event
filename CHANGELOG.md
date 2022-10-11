@@ -1,3 +1,7 @@
+## 1.2.1
+
+* Add widget events change listener on mixin level
+
 ## 1.2.0
 
 * Use controller
