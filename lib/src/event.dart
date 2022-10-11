@@ -36,27 +36,39 @@ class WidgetEvent {
 
   /// The state when the widget has entered some form of invalid state.
   static const error = WidgetEvent('error');
-}
 
-extension WidgetEventFlag on Set<WidgetEvent> {
-  /// Getter for whether this class considers [WidgetEvent.disabled] to be active.
-  bool get isDisabled => contains(WidgetEvent.disabled);
+  /// Checker for whether events considers [WidgetEvent.disabled] to be active.
+  static bool isDisabled(Set<WidgetEvent> events) {
+    return events.contains(WidgetEvent.disabled);
+  }
 
-  /// Getter for whether this class considers [WidgetEvent.dragged] to be active.
-  bool get isDragged => contains(WidgetEvent.dragged);
+  /// Checker for whether events considers [WidgetEvent.dragged] to be active.
+  static bool isDragged(Set<WidgetEvent> events) {
+    return events.contains(WidgetEvent.dragged);
+  }
 
-  /// Getter for whether this class considers [WidgetEvent.error] to be active.
-  bool get isErrored => contains(WidgetEvent.error);
+  /// Checker for whether events considers [WidgetEvent.error] to be active.
+  static bool isErrored(Set<WidgetEvent> events) {
+    return events.contains(WidgetEvent.error);
+  }
 
-  /// Getter for whether this class considers [WidgetEvent.focused] to be active.
-  bool get isFocused => contains(WidgetEvent.focused);
+  /// Checker for whether events considers [WidgetEvent.focused] to be active.
+  static bool isFocused(Set<WidgetEvent> events) {
+    return events.contains(WidgetEvent.focused);
+  }
 
-  /// Getter for whether this class considers [WidgetEvent.hovered] to be active.
-  bool get isHovered => contains(WidgetEvent.hovered);
+  /// Checker for whether events considers [WidgetEvent.hovered] to be active.
+  static bool isHovered(Set<WidgetEvent> events) {
+    return events.contains(WidgetEvent.hovered);
+  }
 
-  /// Getter for whether this class considers [WidgetEvent.pressed] to be active.
-  bool get isPressed => contains(WidgetEvent.pressed);
+  /// Checker for whether events considers [WidgetEvent.pressed] to be active.
+  static bool isPressed(Set<WidgetEvent> events) {
+    return events.contains(WidgetEvent.pressed);
+  }
 
-  /// Getter for whether this class considers [WidgetEvent.selected] to be active.
-  bool get isSelected => contains(WidgetEvent.selected);
+  /// Checker for whether events considers [WidgetEvent.selected] to be active.
+  static bool isSelected(Set<WidgetEvent> events) {
+    return events.contains(WidgetEvent.selected);
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'event.dart';
+import 'controller.dart';
 
 /// Mixin for [State] classes that require knowledge of changing [WidgetEvent]
 /// values for their child widgets.
@@ -19,7 +20,11 @@ import 'event.dart';
 ///
 /// ```dart
 /// class MyWidget extends StatefulWidget {
-///   const MyWidget({required this.color, required this.child, Key? key}) : super(key: key);
+///   const MyWidget({
+///     Key? key,
+///     required this.color,
+///     required this.child,
+///   }) : super(key: key);
 ///
 ///   final Color color;
 ///   final Widget child;
@@ -29,12 +34,19 @@ import 'event.dart';
 /// }
 ///
 /// class MyWidgetState extends State<MyWidget> with WidgetEventMixin<MyWidget> {
+///
+///   @override
+///   void initState() {
+///     super.initState();
+///     initWidgetEvents();
+///   }
+///
 ///   @override
 ///   Widget build(BuildContext context) {
 ///     return InkWell(
-///       onFocusChange: updateWidgetEvent(WidgetEvent.focused),
+///       onFocusChange: widgetEvents.emit(WidgetEvent.focused),
 ///       child: Container(
-///         color: DrivenProperty.evaluate<Color>(widget.color, widgetEvents),
+///         color: DrivenProperty.evaluate<Color>(widget.color, widgetEvents.value),
 ///         child: widget.child,
 ///       ),
 ///     );
@@ -44,130 +56,85 @@ import 'event.dart';
 /// {@end-tool}
 @optionalTypeArgs
 mixin WidgetEventMixin<T extends StatefulWidget> on State<T> {
-  /// Managed set of active [WidgetEvent] values; designed to be passed to
-  /// [DrivenProperty.resolve] methods.
-  ///
-  /// To mutate and have [setState] called automatically for you, use
-  /// [setWidgetEvent], [addWidgetEvent], or [removeWidgetEvent]. Directly
-  /// mutating the set is possible, and may be necessary if you need to alter its
-  /// list without calling [setState] (and thus triggering a re-render).
-  ///
-  /// To check for a single condition, convenience getters [isPressed], [isHovered],
-  /// [isFocused], etc, are available for each [WidgetEvent] value.
-  @protected
-  Set<WidgetEvent> widgetEvents = <WidgetEvent>{};
+  WidgetEventController? _internalController;
+  WidgetEventController? _externalController;
 
-  /// Called when [widgetEvents] of this [State] object changes.
-  @protected
-  void didChangeWidgetEvent() {}
-
-  /// Callback factory which accepts a [WidgetEvent] value and returns a
-  /// closure to mutate [widgetEvents] and call [setState].
-  ///
-  /// Accepts an optional second named parameter, `onChanged`, which allows
-  /// arbitrary functionality to be wired through the [WidgetEventMixin].
-  /// If supplied, the [onChanged] function is only called when child widgets
-  /// report events that make changes to the current set of [WidgetEvent]s.
-  ///
-  /// {@tool snippet}
-  /// This example shows how to use the [updateWidgetEvent] callback factory
-  /// in other widgets, including the optional [onChanged] callback.
-  ///
-  /// ```dart
-  /// class MyWidget extends StatefulWidget {
-  ///   const MyWidget({this.onPressed, Key? key}) : super(key: key);
-  ///
-  ///   /// Something important this widget must do when pressed.
-  ///   final VoidCallback? onPressed;
-  ///
-  ///   @override
-  ///   State<MyWidget> createState() => MyWidgetState();
-  /// }
-  ///
-  /// class MyWidgetState extends State<MyWidget> with WidgetEventMixin<MyWidget> {
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     return Container(
-  ///       color: isPressed ? Colors.black : Colors.white,
-  ///       child: InkWell(
-  ///         onHighlightChanged: updateWidgetEvent(
-  ///           WidgetEvent.pressed,
-  ///           onChanged: (bool val) {
-  ///             if (val) {
-  ///               widget.onPressed?.call();
-  ///             }
-  ///           },
-  ///         ),
-  ///       ),
-  ///     );
-  ///   }
-  /// }
-  /// ```
-  /// {@end-tool}
-  @protected
-  ValueChanged<bool> updateWidgetEvent(
-    WidgetEvent key, {
-    ValueChanged<bool>? onChanged,
-  }) {
-    return (bool value) {
-      if (widgetEvents.contains(key) == value) return;
-      setWidgetEvent(key, value);
-      onChanged?.call(value);
-    };
+  /// Manages a set of [WidgetEvent]s and notifies listeners of changes.
+  WidgetEventController get widgetEvents {
+    return _externalController ?? _internalController!;
   }
 
-  /// Mutator to mark a [WidgetEvent] value as either active or inactive.
-  @protected
-  void setWidgetEvent(WidgetEvent state, bool isSet) {
-    return isSet ? addWidgetEvent(state) : removeWidgetEvent(state);
+  void _handleEventsControllerChange() {
+    setState(() {});
   }
 
-  /// Mutator to mark a [WidgetEvent] value as active.
+  /// Init widget events with external events controller
+  ///
+  /// @override
+  /// void initState() {
+  ///   super.initState();
+  ///   initWidgetEvents(widget.eventsController);
+  /// }
   @protected
-  void addWidgetEvent(WidgetEvent state) {
-    if (widgetEvents.add(state)) {
-      setState(() {});
-      didChangeWidgetEvent();
+  void initWidgetEvents([WidgetEventController? controller]) {
+    if (controller != null) {
+      _externalController = controller;
+    } else {
+      _internalController = WidgetEventController();
+    }
+    widgetEvents.addListener(_handleEventsControllerChange);
+  }
+
+  /// Update widget events with external events controller
+  ///
+  /// @override
+  /// void didUpdateWidget(covariant MyWidget oldWidget) {
+  ///   super.didUpdateWidget(oldWidget);
+  ///   updateWidgetEvents(
+  ///     oldWidget.eventController,
+  ///     widget.eventController,
+  ///   );
+  /// }
+  @protected
+  void updateWidgetEvents(
+    WidgetEventController? oldController,
+    WidgetEventController? newController,
+  ) {
+    if (newController != oldController) {
+      oldController?.removeListener(_handleEventsControllerChange);
+      if (newController != null) {
+        _internalController?.dispose();
+        _internalController = null;
+      }
+      initWidgetEvents(newController);
     }
   }
 
-  /// Mutator to mark a [WidgetEvent] value as inactive.
   @protected
-  void removeWidgetEvent(WidgetEvent state) {
-    if (widgetEvents.remove(state)) {
-      setState(() {});
-      didChangeWidgetEvent();
-    }
+  void disposeWidgetEvents() {
+    _externalController?.removeListener(_handleEventsControllerChange);
+    _internalController?.dispose();
   }
 
-  /// Getter for whether this class considers [WidgetEvent.disabled] to be active.
-  bool get isDisabled => widgetEvents.isDisabled;
+  @override
+  void initState() {
+    super.initState();
+    initWidgetEvents();
+  }
 
-  /// Getter for whether this class considers [WidgetEvent.dragged] to be active.
-  bool get isDragged => widgetEvents.isDragged;
-
-  /// Getter for whether this class considers [WidgetEvent.error] to be active.
-  bool get isErrored => widgetEvents.isErrored;
-
-  /// Getter for whether this class considers [WidgetEvent.focused] to be active.
-  bool get isFocused => widgetEvents.isFocused;
-
-  /// Getter for whether this class considers [WidgetEvent.hovered] to be active.
-  bool get isHovered => widgetEvents.isHovered;
-
-  /// Getter for whether this class considers [WidgetEvent.pressed] to be active.
-  bool get isPressed => widgetEvents.isPressed;
-
-  /// Getter for whether this class considers [WidgetEvent.selected] to be active.
-  bool get isSelected => widgetEvents.isSelected;
+  @override
+  void dispose() {
+    disposeWidgetEvents();
+    super.dispose();
+  }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<Set<WidgetEvent>>(
+    properties.add(DiagnosticsProperty<WidgetEventController>(
       'widgetEvents',
       widgetEvents,
-      defaultValue: <WidgetEvent>{},
+      defaultValue: null,
     ));
   }
 }

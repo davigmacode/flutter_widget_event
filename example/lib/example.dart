@@ -5,10 +5,15 @@ import 'package:widget_event/widget_event.dart';
 class MyWidgetEvent extends WidgetEvent {
   const MyWidgetEvent(String value) : super(value);
 
+  static const pressed = MyWidgetEvent('pressed');
   static const edited = MyWidgetEvent('edited');
 
+  static bool isPressed(Set<WidgetEvent> events) {
+    return events is MyWidgetEvent && events.contains(MyWidgetEvent.edited);
+  }
+
   static bool isEdited(Set<WidgetEvent> events) {
-    return events.contains(MyWidgetEvent.edited);
+    return events is MyWidgetEvent && events.contains(MyWidgetEvent.edited);
   }
 }
 
@@ -23,18 +28,18 @@ class MyStyle {
   final double opacity;
 
   static MyStyle? evaluate(MyStyle? value, Set<WidgetEvent> events) {
-    return DrivenMyStyle.evaluate(value, events);
+    return _DrivenMyStyle.evaluate(value, events);
   }
 
-  static DrivenMyStyle driven(DrivenPropertyResolver<MyStyle?> callback) {
-    return DrivenMyStyle.by(callback);
+  static MyStyle driven(DrivenPropertyResolver<MyStyle?> callback) {
+    return _DrivenMyStyle.by(callback);
   }
 }
 
 // Custom Driven Property
-abstract class DrivenMyStyle extends MyStyle
+abstract class _DrivenMyStyle extends MyStyle
     implements DrivenProperty<MyStyle?> {
-  const DrivenMyStyle();
+  const _DrivenMyStyle();
 
   @override
   MyStyle? resolve(Set<WidgetEvent> events);
@@ -43,17 +48,13 @@ abstract class DrivenMyStyle extends MyStyle
     return DrivenProperty.evaluate<MyStyle?>(value, events);
   }
 
-  static DrivenMyStyle by(DrivenPropertyResolver<MyStyle?> callback) {
-    return _DrivenMyStyle(callback);
-  }
-
-  static DrivenMyStyle all(MyStyle? value) {
-    return _DrivenMyStyle((events) => value);
+  static _DrivenMyStyle by(DrivenPropertyResolver<MyStyle?> callback) {
+    return _DrivenMyStyleBy(callback);
   }
 }
 
-class _DrivenMyStyle extends DrivenMyStyle {
-  _DrivenMyStyle(this._resolver) : super();
+class _DrivenMyStyleBy extends _DrivenMyStyle {
+  _DrivenMyStyleBy(this._resolver) : super();
 
   final DrivenPropertyResolver<MyStyle?> _resolver;
 
@@ -66,10 +67,12 @@ class MyWidget extends StatefulWidget {
   const MyWidget({
     Key? key,
     this.style,
+    this.eventController,
     this.onPressed,
   }) : super(key: key);
 
   final MyStyle? style;
+  final WidgetEventController? eventController;
   final VoidCallback? onPressed;
 
   @override
@@ -78,13 +81,31 @@ class MyWidget extends StatefulWidget {
 
 class MyWidgetState extends State<MyWidget> with WidgetEventMixin<MyWidget> {
   @override
+  void initState() {
+    super.initState();
+    initWidgetEvents(widget.eventController);
+  }
+
+  @override
+  void didUpdateWidget(covariant MyWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    updateWidgetEvents(
+      oldWidget.eventController,
+      widget.eventController,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final MyStyle? style = MyStyle.evaluate(widget.style, widgetEvents);
+    final MyStyle? style = MyStyle.evaluate(widget.style, widgetEvents.value);
     return Container(
       color: style?.color ?? Colors.red,
       child: TextField(
+        onTap: () {
+          widgetEvents.toggle(MyWidgetEvent.pressed, true);
+        },
         onChanged: (value) {
-          setWidgetEvent(MyWidgetEvent.edited, true);
+          widgetEvents.toggle(MyWidgetEvent.edited, true);
         },
         decoration: InputDecoration(
           border: OutlineInputBorder(

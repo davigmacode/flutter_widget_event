@@ -15,7 +15,9 @@ Just like MaterialState but with convenient name and more spices.
 To read more about classes and other references used by `widget_event`, see the [API Reference](https://pub.dev/documentation/widget_event/latest/).
 
 ```dart
-// Let's say, we have a custom widget with custom [style] property, we want to dynamically change the [style] value when some event happen on the widget, for example on pressed
+// Let's say, we have a custom widget with custom [style] property,
+// we want to dynamically change the [style] value when some event happen
+// on that widget, for example on pressed
 
 class MyStyle {
   const MyStyle({
@@ -62,7 +64,9 @@ class MyWidgetState extends State<MyWidget> {
 ```
 
 ```dart
-// The fastest way to achieve that is to change [MyStyle?] to [DrivenProperty<MyStyle?>?], and use [WidgetEventMixin] with [MyWidgetState] to watch [WidgetEvent] values.
+// The fastest way to achieve that is to change [MyStyle?]
+// to [DrivenProperty<MyStyle?>?], and use [WidgetEventMixin]
+// with [MyWidgetState] to watch [WidgetEvent] values.
 
 class MyWidget extends StatefulWidget {
   const MyWidget({
@@ -86,7 +90,7 @@ class MyWidgetState extends State<MyWidget> with WidgetEventMixin<MyWidget> {
       color: style?.color ?? Colors.red,
       child: TextField(
         onTap: () {
-          setWidgetEvent(WidgetEvent.pressed, true);
+          widgetEvents.toggle(WidgetEvent.pressed, true);
         },
         decoration: InputDecoration(
           border: OutlineInputBorder(
@@ -117,17 +121,21 @@ final myWidget = MyWidget(
   style: const MyStyle(color: Colors.amber),
 );
 
-// Once more the fastest way to fill [style] with a single value for all events is
+// Once more the fastest way to fill [style]
+// with a single value for all events is
 final myWidget = MyWidget(
-  style: DrivenProperty.all<MyStyle?>(const MyStyle(color: Colors.amber)),
+  style: DrivenProperty.all<MyStyle?>(
+    const MyStyle(color: Colors.amber),
+  ),
 );
 ```
 
 ```dart
-// What if we want the event driven [style] and we want to directly fill the [style] with [MyStyle] too, so just create a custom [DrivenProperty]
+// What if we want the event driven [style]
+// and we want to directly fill the [style] with [MyStyle] too,
+// so just create a custom [DrivenProperty]
 
-abstract class DrivenMyStyle extends MyStyle
-    implements DrivenProperty<MyStyle?> {
+abstract class DrivenMyStyle extends MyStyle implements DrivenProperty<MyStyle?> {
   const DrivenMyStyle();
 
   @override
@@ -165,12 +173,15 @@ class MyStyle {
   final Color color;
   final double opacity;
 
-  static DrivenMyStyle driven(DrivenPropertyResolver<MyStyle?> callback) {
+  static DrivenMyStyle driven(
+    DrivenPropertyResolver<MyStyle?> callback,
+  ) {
     return DrivenMyStyle.by(callback);
   }
 }
 
-// And finally a little modification on the [MyWidget] to evaluate value from [MyStyle] or [DrivenMyStyle]
+// And finally a little modification on the [MyWidget]
+// to evaluate value from [MyStyle] or [DrivenMyStyle]
 class MyWidget extends StatefulWidget {
   const MyWidget({
     Key? key,
@@ -193,7 +204,7 @@ class MyWidgetState extends State<MyWidget> with WidgetEventMixin<MyWidget> {
       color: style?.color ?? Colors.red,
       child: TextField(
         onTap: () {
-          setWidgetEvent(WidgetEvent.pressed, true);
+          widgetEvents.toggle(WidgetEvent.pressed, true);
         },
         decoration: InputDecoration(
           border: OutlineInputBorder(
@@ -259,10 +270,10 @@ class MyWidgetState extends State<MyWidget> with WidgetEventMixin<MyWidget> {
       color: style?.color ?? Colors.red,
       child: TextField(
         onTap: () {
-          setWidgetEvent(WidgetEvent.pressed, true);
+          widgetEvents.toggle(WidgetEvent.pressed, true);
         },
         onChanged: (value) {
-          setWidgetEvent(MyWidgetEvent.edited, true);
+          widgetEvents.toggle(MyWidgetEvent.edited, true);
         },
         decoration: InputDecoration(
           border: OutlineInputBorder(
