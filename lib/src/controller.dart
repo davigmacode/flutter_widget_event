@@ -148,4 +148,22 @@ class WidgetEventController extends ChangeNotifier {
       onChanged?.call();
     }
   }
+
+  /// Merge [value] with a new set of [WidgetEvent].
+  void merge(Set<WidgetEvent> events) {
+    value.addAll(events);
+    notifyListeners();
+  }
+
+  /// Assign a new set of [WidgetEvent] to [value].
+  void assign(Set<WidgetEvent> events) {
+    value = events;
+    notifyListeners();
+  }
+
+  /// Removes all elements from the [value].
+  void clear() {
+    value.clear();
+    notifyListeners();
+  }
 }

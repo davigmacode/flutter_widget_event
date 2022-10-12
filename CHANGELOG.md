@@ -1,3 +1,7 @@
+## 1.2.3
+
+* Add more methods to controller
+
 ## 1.2.2
 
 * Override WidgetEvent.toString

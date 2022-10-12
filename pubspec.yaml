@@ -1,6 +1,6 @@
 name: widget_event
 description: Just like MaterialState but with convenient name and more spices.
-version: 1.2.2
+version: 1.2.3
 homepage: https://github.com/davigmacode/flutter_widget_event
 
 environment:
