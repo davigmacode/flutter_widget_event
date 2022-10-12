@@ -6,6 +6,9 @@ class WidgetEvent {
   const WidgetEvent(this.value);
   final String value;
 
+  @override
+  String toString() => 'WidgetEvent.$value';
+
   /// The state when the user drags their mouse cursor over the given widget.
   static const hovered = WidgetEvent('hovered');
 
