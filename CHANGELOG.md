@@ -1,3 +1,9 @@
+## 1.2.5
+
+* Improve mixin
+* Change controller `assign` to `replace`
+* Create alias to `Set<WidgetEvent>`
+
 ## 1.2.3
 
 * Add more methods to controller

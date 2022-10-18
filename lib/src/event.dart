@@ -75,3 +75,6 @@ class WidgetEvent {
     return events.contains(WidgetEvent.selected);
   }
 }
+
+/// Alias to Set<WidgetEvent>
+typedef WidgetEvents = Set<WidgetEvent>;

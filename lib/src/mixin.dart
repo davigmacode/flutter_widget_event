@@ -64,9 +64,11 @@ mixin WidgetEventMixin<T extends StatefulWidget> on State<T> {
     return _externalController ?? _internalController!;
   }
 
-  void _handleEventsControllerChange() {
+  /// Called when [widgetEvents] changes.
+  @protected
+  @mustCallSuper
+  void didChangeWidgetEvents() {
     setState(() {});
-    didChangeWidgetEvents();
   }
 
   /// Init widget events with external events controller
@@ -83,7 +85,7 @@ mixin WidgetEventMixin<T extends StatefulWidget> on State<T> {
     } else {
       _internalController = WidgetEventController();
     }
-    widgetEvents.addListener(_handleEventsControllerChange);
+    widgetEvents.addListener(didChangeWidgetEvents);
   }
 
   /// Update widget events with external events controller
@@ -102,7 +104,7 @@ mixin WidgetEventMixin<T extends StatefulWidget> on State<T> {
     WidgetEventController? newController,
   ) {
     if (newController != oldController) {
-      oldController?.removeListener(_handleEventsControllerChange);
+      oldController?.removeListener(didChangeWidgetEvents);
       if (newController != null) {
         _internalController?.dispose();
         _internalController = null;
@@ -113,18 +115,21 @@ mixin WidgetEventMixin<T extends StatefulWidget> on State<T> {
 
   @protected
   void disposeWidgetEvents() {
-    _externalController?.removeListener(_handleEventsControllerChange);
+    _externalController?.removeListener(didChangeWidgetEvents);
     _internalController?.dispose();
   }
-
-  /// Called when [widgetEvents] changes.
-  @protected
-  void didChangeWidgetEvents() {}
 
   @override
   void initState() {
     super.initState();
     initWidgetEvents();
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
   }
 
   @override

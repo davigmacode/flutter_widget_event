@@ -155,8 +155,8 @@ class WidgetEventController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Assign a new set of [WidgetEvent] to [value].
-  void assign(Set<WidgetEvent> events) {
+  /// Replace [value] with a new set of [WidgetEvent].
+  void replace(Set<WidgetEvent> events) {
     value = events;
     notifyListeners();
   }
