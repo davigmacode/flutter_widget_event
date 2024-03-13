@@ -141,10 +141,6 @@ mixin WidgetEventMixin<T extends StatefulWidget> on State<T> {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<WidgetEventController>(
-      'widgetEvents',
-      widgetEvents,
-      defaultValue: null,
-    ));
+    widgetEvents.debugFillProperties(properties);
   }
 }
