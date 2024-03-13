@@ -10,25 +10,29 @@ import 'event.dart';
 /// Listeners are notified whenever the value changes.
 /// The value should only be changed with update;
 /// it should not be modified directly.
-class WidgetEventController extends ChangeNotifier {
+class WidgetEventController extends ChangeNotifier with Diagnosticable {
   WidgetEventController({
-    bool selected = false,
-    bool disabled = false,
     bool focused = false,
     bool hovered = false,
     bool pressed = false,
     bool dragged = false,
+    bool selected = false,
+    bool disabled = false,
+    bool indeterminate = false,
     bool error = false,
+    bool loading = false,
     Set<WidgetEvent>? events,
     this.onChanged,
   }) : value = <WidgetEvent>{
-          if (selected) WidgetEvent.selected,
-          if (disabled) WidgetEvent.disabled,
           if (focused) WidgetEvent.focused,
           if (hovered) WidgetEvent.hovered,
           if (pressed) WidgetEvent.pressed,
           if (dragged) WidgetEvent.dragged,
+          if (selected) WidgetEvent.selected,
+          if (indeterminate) WidgetEvent.indeterminate,
+          if (disabled) WidgetEvent.disabled,
           if (error) WidgetEvent.error,
+          if (loading) WidgetEvent.loading,
         }..addAll(events ?? {});
 
   /// Called when [value] changes.
@@ -47,26 +51,32 @@ class WidgetEventController extends ChangeNotifier {
   /// [isFocused], etc, are available for each [WidgetEvent] value.
   Set<WidgetEvent> value;
 
-  /// Getter for whether [WidgetEvent.disabled] to be active.
-  bool get isDisabled => WidgetEvent.isDisabled(value);
-
-  /// Getter for whether [WidgetEvent.dragged] to be active.
-  bool get isDragged => WidgetEvent.isDragged(value);
-
-  /// Getter for whether [WidgetEvent.error] to be active.
-  bool get isErrored => WidgetEvent.isErrored(value);
+  /// Getter for whether [WidgetEvent.hovered] to be active.
+  bool get isHovered => WidgetEvent.isHovered(value);
 
   /// Getter for whether [WidgetEvent.focused] to be active.
   bool get isFocused => WidgetEvent.isFocused(value);
 
-  /// Getter for whether [WidgetEvent.hovered] to be active.
-  bool get isHovered => WidgetEvent.isHovered(value);
-
   /// Getter for whether [WidgetEvent.pressed] to be active.
   bool get isPressed => WidgetEvent.isPressed(value);
 
+  /// Getter for whether [WidgetEvent.dragged] to be active.
+  bool get isDragged => WidgetEvent.isDragged(value);
+
   /// Getter for whether [WidgetEvent.selected] to be active.
   bool get isSelected => WidgetEvent.isSelected(value);
+
+  /// Getter for whether [WidgetEvent.indeterminate] to be active.
+  bool get isIndeterminate => WidgetEvent.isIndeterminate(value);
+
+  /// Getter for whether [WidgetEvent.disabled] to be active.
+  bool get isDisabled => WidgetEvent.isDisabled(value);
+
+  /// Getter for whether [WidgetEvent.error] to be active.
+  bool get isErrored => WidgetEvent.isErrored(value);
+
+  /// Getter for whether [WidgetEvent.loading] to be active.
+  bool get isLoading => WidgetEvent.isLoading(value);
 
   /// Callback factory which accepts a [T] value and returns a
   /// closure to mutate [value] and call [setState].
@@ -165,5 +175,18 @@ class WidgetEventController extends ChangeNotifier {
   void clear() {
     value.clear();
     notifyListeners();
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(IterableProperty<WidgetEvent>('value', value));
+    properties.add(DiagnosticsProperty<bool>('isDisabled', isDisabled));
+    properties.add(DiagnosticsProperty<bool>('isDragged', isDragged));
+    properties.add(DiagnosticsProperty<bool>('isErrored', isErrored));
+    properties.add(DiagnosticsProperty<bool>('isFocused', isFocused));
+    properties.add(DiagnosticsProperty<bool>('isHovered', isHovered));
+    properties.add(DiagnosticsProperty<bool>('isPressed', isPressed));
+    properties.add(DiagnosticsProperty<bool>('isSelected', isSelected));
   }
 }

@@ -31,6 +31,9 @@ class WidgetEvent {
   /// and things that are selected from a set of options (such as tabs and radio buttons).
   static const selected = WidgetEvent('selected');
 
+  /// The event when this item has been indeterminate.
+  static const indeterminate = WidgetEvent('indeterminate');
+
   /// The state when this widget is disabled and cannot be interacted with.
   ///
   /// Disabled widgets should not respond to hover, focus, press, or drag
@@ -40,19 +43,12 @@ class WidgetEvent {
   /// The state when the widget has entered some form of invalid state.
   static const error = WidgetEvent('error');
 
-  /// Checker for whether events considers [WidgetEvent.disabled] to be active.
-  static bool isDisabled(Set<WidgetEvent> events) {
-    return events.contains(WidgetEvent.disabled);
-  }
+  /// The event when this item has entered of loading state.
+  static const loading = WidgetEvent('loading');
 
-  /// Checker for whether events considers [WidgetEvent.dragged] to be active.
-  static bool isDragged(Set<WidgetEvent> events) {
-    return events.contains(WidgetEvent.dragged);
-  }
-
-  /// Checker for whether events considers [WidgetEvent.error] to be active.
-  static bool isErrored(Set<WidgetEvent> events) {
-    return events.contains(WidgetEvent.error);
+  /// Checker for whether events considers [WidgetEvent.hovered] to be active.
+  static bool isHovered(Set<WidgetEvent> events) {
+    return events.contains(WidgetEvent.hovered);
   }
 
   /// Checker for whether events considers [WidgetEvent.focused] to be active.
@@ -60,19 +56,39 @@ class WidgetEvent {
     return events.contains(WidgetEvent.focused);
   }
 
-  /// Checker for whether events considers [WidgetEvent.hovered] to be active.
-  static bool isHovered(Set<WidgetEvent> events) {
-    return events.contains(WidgetEvent.hovered);
-  }
-
   /// Checker for whether events considers [WidgetEvent.pressed] to be active.
   static bool isPressed(Set<WidgetEvent> events) {
     return events.contains(WidgetEvent.pressed);
   }
 
+  /// Checker for whether events considers [WidgetEvent.dragged] to be active.
+  static bool isDragged(Set<WidgetEvent> events) {
+    return events.contains(WidgetEvent.dragged);
+  }
+
   /// Checker for whether events considers [WidgetEvent.selected] to be active.
   static bool isSelected(Set<WidgetEvent> events) {
     return events.contains(WidgetEvent.selected);
+  }
+
+  /// Checker for whether events considers [WidgetEvent.indeterminate] to be active.
+  static bool isIndeterminate(Set<WidgetEvent> events) {
+    return events.contains(indeterminate);
+  }
+
+  /// Checker for whether events considers [WidgetEvent.disabled] to be active.
+  static bool isDisabled(Set<WidgetEvent> events) {
+    return events.contains(WidgetEvent.disabled);
+  }
+
+  /// Checker for whether events considers [WidgetEvent.error] to be active.
+  static bool isErrored(Set<WidgetEvent> events) {
+    return events.contains(WidgetEvent.error);
+  }
+
+  /// Checker for whether events considers [WidgetEvent.loading] to be active.
+  static bool isLoading(Set<WidgetEvent> events) {
+    return events.contains(loading);
   }
 }
 
