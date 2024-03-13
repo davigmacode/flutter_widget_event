@@ -1,3 +1,10 @@
+## 1.2.6
+
+* Added lerp utils
+* Added mouse cursor event
+* Added indeterminate and loading event
+* Added debug fill properties
+
 ## 1.2.5
 
 * Improve mixin
