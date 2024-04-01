@@ -7,7 +7,7 @@ import 'property.dart';
 abstract class DrivenColor extends Color implements DrivenProperty<Color> {
   /// Abstract const constructor. This constructor enables subclasses to provide
   /// const constructors so that they can be used in const expressions.
-  const DrivenColor(int defaultValue) : super(defaultValue);
+  const DrivenColor(super.defaultValue);
 
   @override
   Color resolve(Set<WidgetEvent> events);

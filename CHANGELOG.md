@@ -1,3 +1,7 @@
+## 1.2.7
+
+* Removed lerp utils
+
 ## 1.2.6
 
 * Added lerp utils

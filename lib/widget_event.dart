@@ -4,4 +4,3 @@ export 'src/event.dart';
 export 'src/mixin.dart';
 export 'src/controller.dart';
 export 'src/property.dart';
-export 'src/lerp.dart';

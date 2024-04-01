@@ -3,7 +3,7 @@ import 'package:widget_event/widget_event.dart';
 
 // Custom event
 class MyWidgetEvent extends WidgetEvent {
-  const MyWidgetEvent(String value) : super(value);
+  const MyWidgetEvent(super.value);
 
   static const pressed = MyWidgetEvent('pressed');
   static const edited = MyWidgetEvent('edited');
@@ -65,11 +65,11 @@ class _DrivenMyStyleBy extends _DrivenMyStyle {
 // Custom widget with event driven property
 class MyWidget extends StatefulWidget {
   const MyWidget({
-    Key? key,
+    super.key,
     this.style,
     this.eventController,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   final MyStyle? style;
   final WidgetEventController? eventController;
