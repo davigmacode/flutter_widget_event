@@ -1,3 +1,7 @@
+## 1.2.8
+
+* Added driven to entry point
+
 ## 1.2.7
 
 * Removed lerp utils
