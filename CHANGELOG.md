@@ -1,3 +1,7 @@
+## 1.2.9
+
+* Adjust sdk constraints
+
 ## 1.2.8
 
 * Added driven to entry point
