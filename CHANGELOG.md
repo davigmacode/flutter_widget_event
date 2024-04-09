@@ -1,3 +1,7 @@
+## 1.3.0
+
+* Added driven widget
+
 ## 1.2.9
 
 * Adjust sdk constraints
