@@ -68,7 +68,8 @@ mixin WidgetEventMixin<T extends StatefulWidget> on State<T> {
   @protected
   @mustCallSuper
   void didChangeWidgetEvents() {
-    setState(() {});
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => setState(() {}));
   }
 
   /// Init widget events with external events controller
