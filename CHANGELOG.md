@@ -1,3 +1,7 @@
+## 1.3.2
+
+* Use SchedulerBinding instead of WidgetsBinding
+
 ## 1.3.1
 
 * Fixed FlutterError setState() or markNeedsBuild() called when widget tree was locked.
