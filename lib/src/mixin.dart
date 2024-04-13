@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'event.dart';
 import 'controller.dart';
@@ -68,8 +69,7 @@ mixin WidgetEventMixin<T extends StatefulWidget> on State<T> {
   @protected
   @mustCallSuper
   void didChangeWidgetEvents() {
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => setState(() {}));
+    SchedulerBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   /// Init widget events with external events controller
