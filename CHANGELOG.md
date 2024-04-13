@@ -1,3 +1,7 @@
+## 1.3.3
+
+* Removed SchedulerBinding
+
 ## 1.3.2
 
 * Use SchedulerBinding instead of WidgetsBinding
