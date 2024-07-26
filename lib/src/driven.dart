@@ -4,18 +4,23 @@ import 'package:flutter/services.dart';
 import 'event.dart';
 import 'property.dart';
 
-abstract class DrivenWidget extends Widget implements DrivenProperty<Widget> {
+abstract class DrivenWidget<T extends Widget?> extends Widget
+    implements DrivenProperty<T> {
   const DrivenWidget._({Key? key}) : super(key: key);
 
   @override
-  Widget resolve(Set<WidgetEvent> events);
+  T resolve(Set<WidgetEvent> events);
 
-  static Widget evaluate(Widget value, Set<WidgetEvent> events) {
-    return DrivenProperty.evaluate<Widget>(value, events);
+  static T evaluate<T extends Widget?>(T value, Set<WidgetEvent> events) {
+    return DrivenProperty.evaluate<T>(value, events);
+  }
+
+  static DrivenWidget maybe(DrivenPropertyResolver<Widget?> callback) {
+    return _DrivenWidget(callback);
   }
 
   static DrivenWidget by(DrivenPropertyResolver<Widget> callback) {
-    return _DrivenWidget(callback);
+    return _DrivenWidget<Widget>(callback);
   }
 
   static DrivenWidget all(Widget value) {
@@ -23,13 +28,13 @@ abstract class DrivenWidget extends Widget implements DrivenProperty<Widget> {
   }
 }
 
-class _DrivenWidget extends DrivenWidget {
-  _DrivenWidget(this._resolver) : super._(key: _resolver({}).key);
+class _DrivenWidget<T extends Widget?> extends DrivenWidget<T> {
+  _DrivenWidget(this._resolver) : super._(key: _resolver({})?.key);
 
-  final DrivenPropertyResolver<Widget> _resolver;
+  final DrivenPropertyResolver<T> _resolver;
 
   @override
-  Widget resolve(Set<WidgetEvent> events) => _resolver(events);
+  T resolve(Set<WidgetEvent> events) => _resolver(events);
 
   @override
   Element createElement() {
