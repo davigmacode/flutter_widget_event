@@ -5,7 +5,7 @@ import 'event.dart';
 import 'property.dart';
 
 abstract class DrivenWidget extends Widget implements DrivenProperty<Widget> {
-  const DrivenWidget({Key? key}) : super(key: key);
+  const DrivenWidget._({Key? key}) : super(key: key);
 
   @override
   Widget resolve(Set<WidgetEvent> events);
@@ -24,7 +24,7 @@ abstract class DrivenWidget extends Widget implements DrivenProperty<Widget> {
 }
 
 class _DrivenWidget extends DrivenWidget {
-  _DrivenWidget(this._resolver) : super(key: _resolver({}).key);
+  _DrivenWidget(this._resolver) : super._(key: _resolver({}).key);
 
   final DrivenPropertyResolver<Widget> _resolver;
 
