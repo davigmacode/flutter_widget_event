@@ -1,3 +1,9 @@
+## 1.4.0
+
+* Only check the value for equality operator of the WidgetEvent
+* Driven widget can have nullable value
+* Driven widget Use private constructor
+
 ## 1.3.3
 
 * Removed SchedulerBinding
