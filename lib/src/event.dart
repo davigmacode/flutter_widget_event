@@ -3,11 +3,22 @@
 ///
 /// Some widgets track their current state in a `Set<WidgetEvent>`.
 class WidgetEvent {
+  /// Creates a new instance of `WidgetEvent` with the provided value.
   const WidgetEvent(this.value);
+
+  /// The value of the widget event.
   final String value;
 
   @override
   String toString() => 'WidgetEvent.$value';
+
+  @override
+  bool operator ==(Object other) {
+    return other is WidgetEvent && value == other.value;
+  }
+
+  @override
+  int get hashCode => value.hashCode;
 
   /// The state when the user drags their mouse cursor over the given widget.
   static const hovered = WidgetEvent('hovered');
@@ -48,27 +59,27 @@ class WidgetEvent {
 
   /// Checker for whether events considers [WidgetEvent.hovered] to be active.
   static bool isHovered(Set<WidgetEvent> events) {
-    return events.contains(WidgetEvent.hovered);
+    return events.contains(hovered);
   }
 
   /// Checker for whether events considers [WidgetEvent.focused] to be active.
   static bool isFocused(Set<WidgetEvent> events) {
-    return events.contains(WidgetEvent.focused);
+    return events.contains(focused);
   }
 
   /// Checker for whether events considers [WidgetEvent.pressed] to be active.
   static bool isPressed(Set<WidgetEvent> events) {
-    return events.contains(WidgetEvent.pressed);
+    return events.contains(pressed);
   }
 
   /// Checker for whether events considers [WidgetEvent.dragged] to be active.
   static bool isDragged(Set<WidgetEvent> events) {
-    return events.contains(WidgetEvent.dragged);
+    return events.contains(dragged);
   }
 
   /// Checker for whether events considers [WidgetEvent.selected] to be active.
   static bool isSelected(Set<WidgetEvent> events) {
-    return events.contains(WidgetEvent.selected);
+    return events.contains(selected);
   }
 
   /// Checker for whether events considers [WidgetEvent.indeterminate] to be active.
@@ -78,12 +89,12 @@ class WidgetEvent {
 
   /// Checker for whether events considers [WidgetEvent.disabled] to be active.
   static bool isDisabled(Set<WidgetEvent> events) {
-    return events.contains(WidgetEvent.disabled);
+    return events.contains(disabled);
   }
 
   /// Checker for whether events considers [WidgetEvent.error] to be active.
   static bool isErrored(Set<WidgetEvent> events) {
-    return events.contains(WidgetEvent.error);
+    return events.contains(error);
   }
 
   /// Checker for whether events considers [WidgetEvent.loading] to be active.
