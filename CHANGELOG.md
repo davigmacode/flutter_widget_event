@@ -1,3 +1,9 @@
+## 1.5.0
+
+* Added driven spinner
+* Split driven props into separate files
+* Fixed returned driven widget by and all
+
 ## 1.4.0
 
 * Only check the value for equality operator of the WidgetEvent
