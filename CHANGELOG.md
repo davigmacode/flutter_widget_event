@@ -1,3 +1,7 @@
+## 1.6.1
+
+* Driven switcher and spinner extends from driven widget
+
 ## 1.6.0
 
 * Improved driven spinner
