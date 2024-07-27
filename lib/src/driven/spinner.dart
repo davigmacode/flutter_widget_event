@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../event.dart';
 import '../property.dart';
-import 'widget.dart';
 
 /// A circular spinner that can be driven by a `DrivenWidget`.
 ///
 /// Displays a circular progress indicator when the associated `DrivenWidget`
 /// indicates loading state.
-class DrivenSpinner extends StatelessWidget implements DrivenProperty<Widget> {
+class DrivenSpinner extends Widget implements DrivenProperty<Widget> {
   /// Creates a `DrivenSpinner`.
   const DrivenSpinner({
     super.key,
@@ -24,7 +23,7 @@ class DrivenSpinner extends StatelessWidget implements DrivenProperty<Widget> {
   ///
   /// Returns a `DrivenWidget` that will display a `DrivenSpinner` if the associated
   /// `events` indicate loading state. Otherwise, returns null.
-  static DrivenWidget<Widget?> maybe({
+  static DrivenProperty<Widget?> maybe({
     Key? key,
     double? size = 16,
     Color? color,
@@ -33,7 +32,7 @@ class DrivenSpinner extends StatelessWidget implements DrivenProperty<Widget> {
     double offset = 0,
     bool rounded = true,
   }) {
-    return DrivenWidget.maybe((events) {
+    return DrivenProperty.by<Widget?>((events) {
       return WidgetEvent.isLoading(events)
           ? DrivenSpinner(
               key: key,
@@ -51,7 +50,16 @@ class DrivenSpinner extends StatelessWidget implements DrivenProperty<Widget> {
   @override
   Widget resolve(events) {
     return WidgetEvent.isLoading(events)
-        ? Builder(builder: (context) => build(context))
+        ? SizedBox.square(
+            dimension: size,
+            child: CircularProgressIndicator(
+              strokeWidth: width,
+              strokeAlign: offset,
+              strokeCap: rounded ? StrokeCap.round : StrokeCap.square,
+              color: color,
+              backgroundColor: backgroundColor,
+            ),
+          )
         : SizedBox(key: key);
   }
 
@@ -74,16 +82,7 @@ class DrivenSpinner extends StatelessWidget implements DrivenProperty<Widget> {
   final bool rounded;
 
   @override
-  Widget build(BuildContext context) {
-    return SizedBox.square(
-      dimension: size,
-      child: CircularProgressIndicator(
-        strokeWidth: width,
-        strokeAlign: offset,
-        strokeCap: rounded ? StrokeCap.round : StrokeCap.square,
-        color: color,
-        backgroundColor: backgroundColor,
-      ),
-    );
+  Element createElement() {
+    throw UnimplementedError();
   }
 }
