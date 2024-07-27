@@ -19,12 +19,12 @@ abstract class DrivenWidget<T extends Widget?> extends Widget
     return _DrivenWidget(callback);
   }
 
-  static DrivenWidget by(DrivenPropertyResolver<Widget> callback) {
+  static DrivenWidget<Widget> by(DrivenPropertyResolver<Widget> callback) {
     return _DrivenWidget<Widget>(callback);
   }
 
-  static DrivenWidget all(Widget value) {
-    return _DrivenWidget((events) => value);
+  static DrivenWidget<Widget> all(Widget value) {
+    return _DrivenWidget<Widget>((events) => value);
   }
 }
 
