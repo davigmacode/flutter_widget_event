@@ -1,3 +1,8 @@
+## 1.6.0
+
+* Improved driven spinner
+* Added driven switcher
+
 ## 1.5.0
 
 * Added driven spinner
