@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../event.dart';
-import '../property.dart';
+import 'widget.dart';
 
 /// A circular spinner that can be driven by a `DrivenWidget`.
 ///
 /// Displays a circular progress indicator when the associated `DrivenWidget`
 /// indicates loading state.
-class DrivenSpinner extends Widget implements DrivenProperty<Widget> {
+class DrivenSpinner extends DrivenWidget<Widget> {
   /// Creates a `DrivenSpinner`.
   const DrivenSpinner({
     super.key,
@@ -23,7 +23,7 @@ class DrivenSpinner extends Widget implements DrivenProperty<Widget> {
   ///
   /// Returns a `DrivenWidget` that will display a `DrivenSpinner` if the associated
   /// `events` indicate loading state. Otherwise, returns null.
-  static DrivenProperty<Widget?> maybe({
+  static DrivenWidget<Widget?> maybe({
     Key? key,
     double? size = 16,
     Color? color,
@@ -32,7 +32,7 @@ class DrivenSpinner extends Widget implements DrivenProperty<Widget> {
     double offset = 0,
     bool rounded = true,
   }) {
-    return DrivenProperty.by<Widget?>((events) {
+    return DrivenWidget.maybe((events) {
       return WidgetEvent.isLoading(events)
           ? DrivenSpinner(
               key: key,

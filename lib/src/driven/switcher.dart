@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../event.dart';
 import '../property.dart';
+import 'widget.dart';
 
-class DrivenSwitcher extends Widget implements DrivenProperty<Widget> {
+class DrivenSwitcher extends DrivenWidget<Widget> {
   const DrivenSwitcher(
     this.resolver, {
     super.key,
