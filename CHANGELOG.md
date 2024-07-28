@@ -1,3 +1,7 @@
+## 1.6.4
+
+* Fixed driven switcher duplicate key and added option to disable automatic add key
+
 ## 1.6.3
 
 * Fixed driven switcher duplicate key
