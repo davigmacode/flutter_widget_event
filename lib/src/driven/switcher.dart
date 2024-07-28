@@ -124,7 +124,7 @@ class DrivenSwitcher extends StatelessWidget implements DrivenProperty<Widget> {
       transitionBuilder: transitionBuilder ?? defaultTransitionBuilder,
       layoutBuilder: layoutBuilder ?? defaultLayoutBuilder,
       child: KeyedSubtree(
-        key: ValueKey(events.toString()),
+        key: ValueKey('DrivenSwitcher(${events.toString()})'),
         child: resolver(events),
       ),
     );
