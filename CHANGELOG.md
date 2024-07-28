@@ -1,3 +1,9 @@
+## 1.6.2
+
+* Fixed driven spinner UnimplementedError
+* Driven switcher extends StatelessWidget
+* Added dart doc api to driven switcher
+
 ## 1.6.1
 
 * Driven switcher and spinner extends from driven widget
