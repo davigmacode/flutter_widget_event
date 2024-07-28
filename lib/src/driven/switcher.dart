@@ -36,6 +36,7 @@ class DrivenSwitcher extends StatelessWidget implements DrivenProperty<Widget> {
   DrivenSwitcher.at(
     Widget fallback, {
     super.key,
+    bool maintainKey = true,
     this.duration,
     this.reverseDuration,
     this.switchInCurve,
@@ -52,35 +53,43 @@ class DrivenSwitcher extends StatelessWidget implements DrivenProperty<Widget> {
     Widget? indeterminate,
     Widget? selected,
   }) : resolver = ((events) {
+          Widget result = fallback;
           if (errored != null && WidgetEvent.isErrored(events)) {
-            return errored;
+            result = errored;
           }
           if (disabled != null && WidgetEvent.isDisabled(events)) {
-            return disabled;
+            result = disabled;
           }
           if (loading != null && WidgetEvent.isLoading(events)) {
-            return loading;
+            result = loading;
           }
           if (dragged != null && WidgetEvent.isDragged(events)) {
-            return dragged;
+            result = dragged;
           }
           if (pressed != null && WidgetEvent.isPressed(events)) {
-            return pressed;
+            result = pressed;
           }
           if (hovered != null && WidgetEvent.isHovered(events)) {
-            return hovered;
+            result = hovered;
           }
           if (focused != null && WidgetEvent.isFocused(events)) {
-            return focused;
+            result = focused;
           }
           if (indeterminate != null && WidgetEvent.isIndeterminate(events)) {
-            return indeterminate;
+            result = indeterminate;
           }
           if (selected != null && WidgetEvent.isSelected(events)) {
-            return selected;
+            result = selected;
           }
 
-          return fallback;
+          if (maintainKey) {
+            result = KeyedSubtree(
+              key: ValueKey('DrivenSwitcher(${events.toString()})'),
+              child: result,
+            );
+          }
+
+          return result;
         });
 
   /// The resolver function that determines the child widget to display.
@@ -123,10 +132,7 @@ class DrivenSwitcher extends StatelessWidget implements DrivenProperty<Widget> {
       switchOutCurve: switchOutCurve ?? switchInCurve ?? Curves.linear,
       transitionBuilder: transitionBuilder ?? defaultTransitionBuilder,
       layoutBuilder: layoutBuilder ?? defaultLayoutBuilder,
-      child: KeyedSubtree(
-        key: ValueKey('DrivenSwitcher(${events.toString()})'),
-        child: resolver(events),
-      ),
+      child: resolver(events),
     );
   }
 
