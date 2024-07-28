@@ -1,3 +1,7 @@
+## 1.6.5
+
+* Fixed driven switcher resolver
+
 ## 1.6.4
 
 * Fixed driven switcher duplicate key and added option to disable automatic add key
