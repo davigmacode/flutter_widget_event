@@ -53,33 +53,28 @@ class DrivenSwitcher extends StatelessWidget implements DrivenProperty<Widget> {
     Widget? indeterminate,
     Widget? selected,
   }) : resolver = ((events) {
-          Widget result = fallback;
+          Widget result;
           if (errored != null && WidgetEvent.isErrored(events)) {
             result = errored;
-          }
-          if (disabled != null && WidgetEvent.isDisabled(events)) {
+          } else if (disabled != null && WidgetEvent.isDisabled(events)) {
             result = disabled;
-          }
-          if (loading != null && WidgetEvent.isLoading(events)) {
+          } else if (loading != null && WidgetEvent.isLoading(events)) {
             result = loading;
-          }
-          if (dragged != null && WidgetEvent.isDragged(events)) {
+          } else if (dragged != null && WidgetEvent.isDragged(events)) {
             result = dragged;
-          }
-          if (pressed != null && WidgetEvent.isPressed(events)) {
+          } else if (pressed != null && WidgetEvent.isPressed(events)) {
             result = pressed;
-          }
-          if (hovered != null && WidgetEvent.isHovered(events)) {
+          } else if (hovered != null && WidgetEvent.isHovered(events)) {
             result = hovered;
-          }
-          if (focused != null && WidgetEvent.isFocused(events)) {
+          } else if (focused != null && WidgetEvent.isFocused(events)) {
             result = focused;
-          }
-          if (indeterminate != null && WidgetEvent.isIndeterminate(events)) {
+          } else if (indeterminate != null &&
+              WidgetEvent.isIndeterminate(events)) {
             result = indeterminate;
-          }
-          if (selected != null && WidgetEvent.isSelected(events)) {
+          } else if (selected != null && WidgetEvent.isSelected(events)) {
             result = selected;
+          } else {
+            result = fallback;
           }
 
           if (maintainKey) {
