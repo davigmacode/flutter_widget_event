@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../event.dart';
 import '../property.dart';
-import 'widget.dart';
 
-class DrivenSwitcher extends DrivenWidget<Widget> {
+class DrivenSwitcher extends StatelessWidget implements DrivenProperty<Widget> {
   const DrivenSwitcher(
     this.resolver, {
     super.key,
@@ -36,64 +35,34 @@ class DrivenSwitcher extends DrivenWidget<Widget> {
     Widget? selected,
   }) : resolver = ((events) {
           if (errored != null && WidgetEvent.isErrored(events)) {
-            return KeyedSubtree(
-              key: const ValueKey('errored'),
-              child: errored,
-            );
+            return errored;
           }
           if (disabled != null && WidgetEvent.isDisabled(events)) {
-            return KeyedSubtree(
-              key: const ValueKey('disabled'),
-              child: disabled,
-            );
+            return disabled;
           }
           if (loading != null && WidgetEvent.isLoading(events)) {
-            return KeyedSubtree(
-              key: const ValueKey('loading'),
-              child: loading,
-            );
+            return loading;
           }
           if (dragged != null && WidgetEvent.isDragged(events)) {
-            return KeyedSubtree(
-              key: const ValueKey('dragged'),
-              child: dragged,
-            );
+            return dragged;
           }
           if (pressed != null && WidgetEvent.isPressed(events)) {
-            return KeyedSubtree(
-              key: const ValueKey('pressed'),
-              child: pressed,
-            );
+            return pressed;
           }
           if (hovered != null && WidgetEvent.isHovered(events)) {
-            return KeyedSubtree(
-              key: const ValueKey('hovered'),
-              child: hovered,
-            );
+            return hovered;
           }
           if (focused != null && WidgetEvent.isFocused(events)) {
-            return KeyedSubtree(
-              key: const ValueKey('focused'),
-              child: focused,
-            );
+            return focused;
           }
           if (indeterminate != null && WidgetEvent.isIndeterminate(events)) {
-            return KeyedSubtree(
-              key: const ValueKey('indeterminate'),
-              child: indeterminate,
-            );
+            return indeterminate;
           }
           if (selected != null && WidgetEvent.isSelected(events)) {
-            return KeyedSubtree(
-              key: const ValueKey('selected'),
-              child: selected,
-            );
+            return selected;
           }
 
-          return KeyedSubtree(
-            key: const ValueKey('fallback'),
-            child: fallback,
-          );
+          return fallback;
         });
 
   final DrivenPropertyResolver<Widget> resolver;
@@ -126,12 +95,15 @@ class DrivenSwitcher extends DrivenWidget<Widget> {
       switchOutCurve: switchOutCurve ?? switchInCurve ?? Curves.linear,
       transitionBuilder: transitionBuilder ?? defaultTransitionBuilder,
       layoutBuilder: layoutBuilder ?? defaultLayoutBuilder,
-      child: resolver(events),
+      child: KeyedSubtree(
+        key: ValueKey(events.toString()),
+        child: resolver(events),
+      ),
     );
   }
 
   @override
-  Element createElement() {
-    throw UnimplementedError();
+  Widget build(BuildContext context) {
+    return resolve({});
   }
 }
