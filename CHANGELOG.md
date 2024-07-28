@@ -1,3 +1,7 @@
+## 1.6.3
+
+* Fixed driven switcher duplicate key
+
 ## 1.6.2
 
 * Fixed driven spinner UnimplementedError
