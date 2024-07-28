@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../event.dart';
-import 'widget.dart';
+import '../property.dart';
 
 /// A circular spinner that can be driven by a `DrivenWidget`.
 ///
 /// Displays a circular progress indicator when the associated `DrivenWidget`
 /// indicates loading state.
-class DrivenSpinner extends DrivenWidget<Widget> {
+class DrivenSpinner extends StatelessWidget implements DrivenProperty<Widget?> {
   /// Creates a `DrivenSpinner`.
   const DrivenSpinner({
     super.key,
@@ -19,48 +19,11 @@ class DrivenSpinner extends DrivenWidget<Widget> {
     this.rounded = true,
   });
 
-  /// Creates a `DrivenWidget` that conditionally displays a `DrivenSpinner`.
-  ///
-  /// Returns a `DrivenWidget` that will display a `DrivenSpinner` if the associated
-  /// `events` indicate loading state. Otherwise, returns null.
-  static DrivenWidget<Widget?> maybe({
-    Key? key,
-    double? size = 16,
-    Color? color,
-    Color? backgroundColor,
-    double width = 2,
-    double offset = 0,
-    bool rounded = true,
-  }) {
-    return DrivenWidget.maybe((events) {
-      return WidgetEvent.isLoading(events)
-          ? DrivenSpinner(
-              key: key,
-              size: size,
-              color: color,
-              backgroundColor: backgroundColor,
-              width: width,
-              offset: offset,
-              rounded: rounded,
-            )
-          : null;
-    });
-  }
-
   @override
-  Widget resolve(events) {
+  Widget? resolve(events) {
     return WidgetEvent.isLoading(events)
-        ? SizedBox.square(
-            dimension: size,
-            child: CircularProgressIndicator(
-              strokeWidth: width,
-              strokeAlign: offset,
-              strokeCap: rounded ? StrokeCap.round : StrokeCap.square,
-              color: color,
-              backgroundColor: backgroundColor,
-            ),
-          )
-        : SizedBox(key: key);
+        ? Builder(builder: (context) => build(context))
+        : null;
   }
 
   /// The size of the spinner.
@@ -82,7 +45,16 @@ class DrivenSpinner extends DrivenWidget<Widget> {
   final bool rounded;
 
   @override
-  Element createElement() {
-    throw UnimplementedError();
+  Widget build(BuildContext context) {
+    return SizedBox.square(
+      dimension: size,
+      child: CircularProgressIndicator(
+        strokeWidth: width,
+        strokeAlign: offset,
+        strokeCap: rounded ? StrokeCap.round : StrokeCap.square,
+        color: color,
+        backgroundColor: backgroundColor,
+      ),
+    );
   }
 }
