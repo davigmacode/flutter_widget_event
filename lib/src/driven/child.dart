@@ -24,16 +24,16 @@ class DrivenChild<T extends Widget?> extends StatelessWidget
   /// match. You can also provide specific widgets for events like error,
   /// disabled, loading, etc.
   const DrivenChild(
-    this.enabled, {
-    this.error,
-    this.disabled,
-    this.loading,
-    this.dragged,
-    this.pressed,
-    this.hovered,
-    this.focused,
-    this.indeterminate,
-    this.selected,
+    this.atEnabled, {
+    this.atError,
+    this.atDisabled,
+    this.atLoading,
+    this.atDragged,
+    this.atPressed,
+    this.atHovered,
+    this.atFocused,
+    this.atIndeterminate,
+    this.atSelected,
     this.custom = const {},
     super.key,
   });
@@ -42,16 +42,16 @@ class DrivenChild<T extends Widget?> extends StatelessWidget
   ///
   /// This constructor simplifies creating a `DrivenChild` where the same widget
   /// is displayed for all event states.
-  const DrivenChild.all(this.enabled, {super.key})
-      : error = null,
-        disabled = null,
-        loading = null,
-        dragged = null,
-        pressed = null,
-        hovered = null,
-        focused = null,
-        indeterminate = null,
-        selected = null,
+  const DrivenChild.all(this.atEnabled, {super.key})
+      : atError = null,
+        atDisabled = null,
+        atLoading = null,
+        atDragged = null,
+        atPressed = null,
+        atHovered = null,
+        atFocused = null,
+        atIndeterminate = null,
+        atSelected = null,
         custom = const {};
 
   /// Creates a `DrivenChild` with the provided `enabled` widget
@@ -61,16 +61,16 @@ class DrivenChild<T extends Widget?> extends StatelessWidget
   /// This constructor allows for more flexibility in determining the child
   /// widget based on events. You provide a function that takes the current
   /// events as input and returns the appropriate widget.
-  const DrivenChild.map(this.enabled, this.custom, {super.key})
-      : error = null,
-        disabled = null,
-        loading = null,
-        dragged = null,
-        pressed = null,
-        hovered = null,
-        focused = null,
-        indeterminate = null,
-        selected = null;
+  const DrivenChild.map(this.atEnabled, this.custom, {super.key})
+      : atError = null,
+        atDisabled = null,
+        atLoading = null,
+        atDragged = null,
+        atPressed = null,
+        atHovered = null,
+        atFocused = null,
+        atIndeterminate = null,
+        atSelected = null;
 
   /// Creates a `DrivenChild` with a callback function
   /// that determines the child widget.
@@ -83,34 +83,34 @@ class DrivenChild<T extends Widget?> extends StatelessWidget
   }
 
   /// The widget to display when the widget is enabled.
-  final T enabled;
+  final T atEnabled;
 
   /// The widget to display when the `WidgetEvent.error` event occurs.
-  final T? error;
+  final T? atError;
 
   /// The widget to display when the `WidgetEvent.disabled` event occurs.
-  final T? disabled;
+  final T? atDisabled;
 
   /// The widget to display when the `WidgetEvent.loading` event occurs.
-  final T? loading;
+  final T? atLoading;
 
   /// The widget to display when the `WidgetEvent.dragged` event occurs.
-  final T? dragged;
+  final T? atDragged;
 
   /// The widget to display when the `WidgetEvent.pressed` event occurs.
-  final T? pressed;
+  final T? atPressed;
 
   /// The widget to display when the `WidgetEvent.hovered` event occurs.
-  final T? hovered;
+  final T? atHovered;
 
   /// The widget to display when the `WidgetEvent.focused` event occurs.
-  final T? focused;
+  final T? atFocused;
 
   /// The widget to display when the `WidgetEvent.indeterminate` event occurs.
-  final T? indeterminate;
+  final T? atIndeterminate;
 
   /// The widget to display when the `WidgetEvent.selected` event occurs.
-  final T? selected;
+  final T? atSelected;
 
   /// A map of custom event-widget associations.
   final Map<WidgetEvent, T?> custom;
@@ -120,20 +120,20 @@ class DrivenChild<T extends Widget?> extends StatelessWidget
   /// This getter returns a combined map containing both the default event-to-widget
   /// mappings (`error`, `disabled`, etc.) and any additional mappings defined in the `custom` map.
   Map<WidgetEvent, T?> get driven => {
-        WidgetEvent.error: error,
-        WidgetEvent.disabled: disabled,
-        WidgetEvent.loading: loading,
-        WidgetEvent.dragged: dragged,
-        WidgetEvent.pressed: pressed,
-        WidgetEvent.hovered: hovered,
-        WidgetEvent.focused: focused,
-        WidgetEvent.indeterminate: indeterminate,
-        WidgetEvent.selected: selected,
+        WidgetEvent.error: atError,
+        WidgetEvent.disabled: atDisabled,
+        WidgetEvent.loading: atLoading,
+        WidgetEvent.dragged: atDragged,
+        WidgetEvent.pressed: atPressed,
+        WidgetEvent.hovered: atHovered,
+        WidgetEvent.focused: atFocused,
+        WidgetEvent.indeterminate: atIndeterminate,
+        WidgetEvent.selected: atSelected,
       }..addAll(custom);
 
   @override
   T resolve(events) {
-    T result = enabled;
+    T result = atEnabled;
     if (driven.isNotEmpty) {
       for (final e in driven.entries) {
         if (events.contains(e.key)) {

@@ -38,7 +38,7 @@ class DrivenSpinner extends DrivenChild<Widget?> {
   final bool rounded;
 
   @override
-  get loading {
+  get atLoading {
     return SizedBox.square(
       dimension: size,
       child: CircularProgressIndicator(
