@@ -1,3 +1,8 @@
+## 1.7.0
+
+* Replace DrivenWidget with DrivenChild
+* Driven spinner and switcher extends from driven child
+
 ## 1.6.5
 
 * Fixed driven switcher resolver
