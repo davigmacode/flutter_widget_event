@@ -34,7 +34,7 @@ class DrivenChild<T extends Widget?> extends StatelessWidget
     this.atFocused,
     this.atIndeterminate,
     this.atSelected,
-    this.custom = const {},
+    this.registry = const {},
     super.key,
   });
 
@@ -52,7 +52,7 @@ class DrivenChild<T extends Widget?> extends StatelessWidget
         atFocused = null,
         atIndeterminate = null,
         atSelected = null,
-        custom = const {};
+        registry = const {};
 
   /// Creates a `DrivenChild` with the provided `enabled` widget
   /// and a map of custom event-widget associations to determine
@@ -61,7 +61,7 @@ class DrivenChild<T extends Widget?> extends StatelessWidget
   /// This constructor allows for more flexibility in determining the child
   /// widget based on events. You provide a function that takes the current
   /// events as input and returns the appropriate widget.
-  const DrivenChild.map(this.atEnabled, this.custom, {super.key})
+  const DrivenChild.map(this.atEnabled, this.registry, {super.key})
       : atError = null,
         atDisabled = null,
         atLoading = null,
@@ -113,7 +113,7 @@ class DrivenChild<T extends Widget?> extends StatelessWidget
   final T? atSelected;
 
   /// A map of custom event-widget associations.
-  final Map<WidgetEvent, T?> custom;
+  final Map<WidgetEvent, T?> registry;
 
   /// Combines the default and custom event-to-widget mappings.
   ///
@@ -129,7 +129,7 @@ class DrivenChild<T extends Widget?> extends StatelessWidget
         WidgetEvent.focused: atFocused,
         WidgetEvent.indeterminate: atIndeterminate,
         WidgetEvent.selected: atSelected,
-      }..addAll(custom);
+      }..addAll(registry);
 
   @override
   T resolve(events) {

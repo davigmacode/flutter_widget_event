@@ -35,7 +35,7 @@ class DrivenSwitcher extends DrivenChild<Widget> {
     super.atFocused,
     super.atIndeterminate,
     super.atSelected,
-    super.custom,
+    super.registry,
     super.key,
     this.duration,
     this.reverseDuration,
@@ -53,8 +53,8 @@ class DrivenSwitcher extends DrivenChild<Widget> {
   /// `DrivenChild.map` and allows specifying additional animation parameters
   /// similar to the main constructor.
   const DrivenSwitcher.map(
-    super.enabled,
-    super.custom, {
+    super.atEnabled,
+    super.registry, {
     super.key,
     this.duration,
     this.reverseDuration,
