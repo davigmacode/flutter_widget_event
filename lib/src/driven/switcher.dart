@@ -1,23 +1,41 @@
-import 'package:flutter/material.dart';
-
+import 'package:flutter/widgets.dart';
 import '../event.dart';
 import '../property.dart';
+import 'child.dart';
 
-/// A widget that switches between different child widgets based on events.
+/// A widget that switches between child widgets based on events,
+/// with animations.
 ///
-/// The `DrivenSwitcher` takes a `resolver` function that determines the child
-/// widget to display based on the current events. It uses an `AnimatedSwitcher`
-/// internally to animate the transitions between child widgets.
-///
-/// You can either provide a single fallback widget or define specific widgets
-/// for different event states (e.g., errored, disabled, loading, etc.).
-class DrivenSwitcher extends StatelessWidget implements DrivenProperty<Widget> {
-  /// Creates a `DrivenSwitcher` with a provided resolver function.
+/// `DrivenSwitcher` inherits from `DrivenChild<Widget>` and utilizes an
+/// `AnimatedSwitcher` internally to provide animated transitions between
+/// child widgets based on the current events. You can define different child
+/// widgets for various event states (e.g., error, disabled, loading, etc.)
+/// using the constructor parameters inherited from `DrivenChild`.
+class DrivenSwitcher extends DrivenChild<Widget> {
+  /// Creates a `DrivenSwitcher` with the provided child widgets for different
+  /// event states and optional animation parameters.
   ///
-  /// The `resolver` function takes the current events as input and returns the
-  /// appropriate child widget to display.
+  /// This constructor inherits all parameters from `DrivenChild` for defining
+  /// child widgets based on events. Additionally, you can specify:
+  ///  * `duration`: The duration of the switch animation.
+  ///  * `reverseDuration`: The duration of the reverse switch animation.
+  ///  * `switchInCurve`: The curve used for the switch-in animation.
+  ///  * `switchOutCurve`: The curve used for the switch-out animation.
+  ///  * `transitionBuilder`: A custom builder function for the switch animation.
+  ///  * `layoutBuilder`: A custom builder function for the layout of the AnimatedSwitcher.
+  ///  * `maintainKey`: Whether to maintain a key for the child widget during switching (defaults to true).
   const DrivenSwitcher(
-    this.resolver, {
+    super.enabled, {
+    super.error,
+    super.disabled,
+    super.loading,
+    super.dragged,
+    super.pressed,
+    super.hovered,
+    super.focused,
+    super.indeterminate,
+    super.selected,
+    super.custom,
     super.key,
     this.duration,
     this.reverseDuration,
@@ -25,70 +43,40 @@ class DrivenSwitcher extends StatelessWidget implements DrivenProperty<Widget> {
     this.switchOutCurve,
     this.transitionBuilder,
     this.layoutBuilder,
-  });
+    this.maintainKey = true,
+  }) : super();
 
-  /// Creates a `DrivenSwitcher` with a fallback widget and optional widgets
-  /// for different event states.
+  /// Creates a `DrivenSwitcher` with a map of custom event-widget associations
+  /// to map events to child widgets and optional animation parameters.
   ///
-  /// This constructor allows you to specify a fallback widget to display when
-  /// no specific event state matches. You can also provide widgets for various
-  /// event states like errored, disabled, loading, etc.
-  DrivenSwitcher.at(
-    Widget fallback, {
+  /// This constructor inherits the event-to-child mapping functionality from
+  /// `DrivenChild.map` and allows specifying additional animation parameters
+  /// similar to the main constructor.
+  const DrivenSwitcher.map(
+    super.enabled,
+    super.custom, {
     super.key,
-    bool maintainKey = true,
     this.duration,
     this.reverseDuration,
     this.switchInCurve,
     this.switchOutCurve,
     this.transitionBuilder,
     this.layoutBuilder,
-    Widget? errored,
-    Widget? disabled,
-    Widget? loading,
-    Widget? dragged,
-    Widget? pressed,
-    Widget? hovered,
-    Widget? focused,
-    Widget? indeterminate,
-    Widget? selected,
-  }) : resolver = ((events) {
-          Widget result;
-          if (errored != null && WidgetEvent.isErrored(events)) {
-            result = errored;
-          } else if (disabled != null && WidgetEvent.isDisabled(events)) {
-            result = disabled;
-          } else if (loading != null && WidgetEvent.isLoading(events)) {
-            result = loading;
-          } else if (dragged != null && WidgetEvent.isDragged(events)) {
-            result = dragged;
-          } else if (pressed != null && WidgetEvent.isPressed(events)) {
-            result = pressed;
-          } else if (hovered != null && WidgetEvent.isHovered(events)) {
-            result = hovered;
-          } else if (focused != null && WidgetEvent.isFocused(events)) {
-            result = focused;
-          } else if (indeterminate != null &&
-              WidgetEvent.isIndeterminate(events)) {
-            result = indeterminate;
-          } else if (selected != null && WidgetEvent.isSelected(events)) {
-            result = selected;
-          } else {
-            result = fallback;
-          }
+    this.maintainKey = true,
+  }) : super.map();
 
-          if (maintainKey) {
-            result = KeyedSubtree(
-              key: ValueKey('DrivenSwitcher(${events.toString()})'),
-              child: result,
-            );
-          }
+  /// Creates a `DrivenSwitcher` from a callback function that resolves the child
+  /// widget based on events.
+  factory DrivenSwitcher.by(DrivenPropertyResolver<Widget> callback) {
+    return DrivenSwitcherResolver(callback);
+  }
 
-          return result;
-        });
-
-  /// The resolver function that determines the child widget to display.
-  final DrivenPropertyResolver<Widget> resolver;
+  /// Whether to maintain a key for the child widget during switching.
+  ///
+  /// Defaults to `true` to preserve state across transitions. Setting this
+  /// to `false` can improve performance but might cause issues if state needs
+  /// to be maintained between child widgets.
+  final bool maintainKey;
 
   /// The duration of the switch animation.
   final Duration? duration;
@@ -120,6 +108,15 @@ class DrivenSwitcher extends StatelessWidget implements DrivenProperty<Widget> {
 
   @override
   Widget resolve(events) {
+    Widget result = super.resolve(events);
+
+    if (maintainKey) {
+      result = KeyedSubtree(
+        key: ValueKey('DrivenSwitcher(${events.toString()})'),
+        child: result,
+      );
+    }
+
     return AnimatedSwitcher(
       duration: duration ?? defaultDuration,
       reverseDuration: reverseDuration,
@@ -127,12 +124,37 @@ class DrivenSwitcher extends StatelessWidget implements DrivenProperty<Widget> {
       switchOutCurve: switchOutCurve ?? switchInCurve ?? Curves.linear,
       transitionBuilder: transitionBuilder ?? defaultTransitionBuilder,
       layoutBuilder: layoutBuilder ?? defaultLayoutBuilder,
-      child: resolver(events),
+      child: result,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return resolve({});
+  }
+}
+
+class DrivenSwitcherResolver extends DrivenSwitcher {
+  /// Creates a `DrivenSwitcherResolver` from a provided resolver function.
+  ///
+  /// This class provides a way to dynamically resolve the child widget based on
+  /// the given events using a custom resolver function.
+  DrivenSwitcherResolver(
+    this.resolver, {
+    super.key,
+    super.maintainKey = false,
+  }) : super(resolver({}));
+
+  /// The resolver function that determines the child widget based on events.
+  final DrivenPropertyResolver<Widget> resolver;
+
+  @override
+  Widget resolve(events) => resolver(events);
+
+  /// Evaluates a given value based on the provided events.
+  ///
+  /// This static method delegates the evaluation to the `DrivenProperty.evaluate` method.
+  static T evaluate<T extends Widget?>(T value, Set<WidgetEvent> events) {
+    return DrivenProperty.evaluate<T>(value, events);
   }
 }

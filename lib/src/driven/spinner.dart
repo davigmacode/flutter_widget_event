@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../event.dart';
-import '../property.dart';
+import 'child.dart';
 
 /// A circular spinner that can be driven by a `DrivenWidget`.
 ///
 /// Displays a circular progress indicator when the associated `DrivenWidget`
 /// indicates loading state.
-class DrivenSpinner extends StatelessWidget implements DrivenProperty<Widget?> {
+class DrivenSpinner extends DrivenChild<Widget?> {
   /// Creates a `DrivenSpinner`.
   const DrivenSpinner({
     super.key,
@@ -17,14 +17,7 @@ class DrivenSpinner extends StatelessWidget implements DrivenProperty<Widget?> {
     this.width = 2,
     this.offset = 0,
     this.rounded = true,
-  });
-
-  @override
-  Widget? resolve(events) {
-    return WidgetEvent.isLoading(events)
-        ? Builder(builder: (context) => build(context))
-        : null;
-  }
+  }) : super(null);
 
   /// The size of the spinner.
   final double? size;
@@ -45,7 +38,7 @@ class DrivenSpinner extends StatelessWidget implements DrivenProperty<Widget?> {
   final bool rounded;
 
   @override
-  Widget build(BuildContext context) {
+  get loading {
     return SizedBox.square(
       dimension: size,
       child: CircularProgressIndicator(
@@ -56,5 +49,10 @@ class DrivenSpinner extends StatelessWidget implements DrivenProperty<Widget?> {
         backgroundColor: backgroundColor,
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return resolve({WidgetEvent.loading})!;
   }
 }
