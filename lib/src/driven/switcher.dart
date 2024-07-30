@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import '../event.dart';
 import '../property.dart';
 import 'child.dart';
+import 'switcher_theme.dart';
 
 /// A widget that switches between child widgets based on events,
 /// with animations.
@@ -62,7 +63,7 @@ class DrivenSwitcher extends DrivenChild<Widget> {
     this.switchOutCurve,
     this.transitionBuilder,
     this.layoutBuilder,
-    this.maintainKey = true,
+    this.maintainKey,
   }) : super.map();
 
   /// Creates a `DrivenSwitcher` from a callback function that resolves the child
@@ -76,7 +77,7 @@ class DrivenSwitcher extends DrivenChild<Widget> {
   /// Defaults to `true` to preserve state across transitions. Setting this
   /// to `false` can improve performance but might cause issues if state needs
   /// to be maintained between child widgets.
-  final bool maintainKey;
+  final bool? maintainKey;
 
   /// The duration of the switch animation.
   final Duration? duration;
@@ -110,22 +111,34 @@ class DrivenSwitcher extends DrivenChild<Widget> {
   Widget resolve(events) {
     Widget result = super.resolve(events);
 
-    if (maintainKey) {
-      result = KeyedSubtree(
-        key: ValueKey('DrivenSwitcher(${events.toString()})'),
+    return Builder(builder: (context) {
+      final theme = DrivenSwitcherTheme.of(context);
+      final themeMaintainKey = maintainKey ?? theme.maintainKey;
+      final themeDuration = duration ?? theme.duration;
+      final themeReverseDuration = reverseDuration ?? theme.reverseDuration;
+      final themeSwitchInCurve = switchInCurve ?? theme.switchInCurve;
+      final themeSwitchOutCurve = switchOutCurve ?? theme.switchOutCurve;
+      final themeTransitionBuilder =
+          transitionBuilder ?? theme.transitionBuilder;
+      final themeLayoutBuilder = layoutBuilder ?? theme.layoutBuilder;
+
+      if (themeMaintainKey) {
+        result = KeyedSubtree(
+          key: ValueKey('DrivenSwitcher(${events.toString()})'),
+          child: result,
+        );
+      }
+      return AnimatedSwitcher(
+        duration: themeDuration ?? defaultDuration,
+        reverseDuration: themeReverseDuration,
+        switchInCurve: themeSwitchInCurve ?? Curves.linear,
+        switchOutCurve:
+            themeSwitchOutCurve ?? themeSwitchInCurve ?? Curves.linear,
+        transitionBuilder: themeTransitionBuilder ?? defaultTransitionBuilder,
+        layoutBuilder: themeLayoutBuilder ?? defaultLayoutBuilder,
         child: result,
       );
-    }
-
-    return AnimatedSwitcher(
-      duration: duration ?? defaultDuration,
-      reverseDuration: reverseDuration,
-      switchInCurve: switchInCurve ?? Curves.linear,
-      switchOutCurve: switchOutCurve ?? switchInCurve ?? Curves.linear,
-      transitionBuilder: transitionBuilder ?? defaultTransitionBuilder,
-      layoutBuilder: layoutBuilder ?? defaultLayoutBuilder,
-      child: result,
-    );
+    });
   }
 
   @override
