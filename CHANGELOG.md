@@ -1,3 +1,8 @@
+## 1.8.0
+
+* Themeable driven spinner
+* Themeable driven switcher
+
 ## 1.7.0
 
 * Replace DrivenWidget with DrivenChild
