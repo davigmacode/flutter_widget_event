@@ -1,5 +1,9 @@
 export 'child.dart';
 export 'color.dart';
 export 'mouse.dart';
+export 'spinner_theme_data.dart';
+export 'spinner_theme.dart';
 export 'spinner.dart';
+export 'switcher_theme_data.dart';
+export 'switcher_theme.dart';
 export 'switcher.dart';
