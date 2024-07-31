@@ -1,3 +1,7 @@
+## 1.9.0
+
+* Added method to update multiple events with a map of widget events
+
 ## 1.8.0
 
 * Themeable driven spinner
