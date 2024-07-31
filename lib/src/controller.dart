@@ -11,6 +11,20 @@ import 'event.dart';
 /// The value should only be changed with update;
 /// it should not be modified directly.
 class WidgetEventController extends ChangeNotifier with Diagnosticable {
+  /// Creates a new instance of [WidgetEventController].
+  ///
+  /// Optionally allows setting the initial state of the events.
+  ///  * [focused]: Whether the widget is currently focused.
+  ///  * [hovered]: Whether the widget is currently hovered.
+  ///  * [pressed]: Whether the widget is currently pressed.
+  ///  * [dragged]: Whether the widget is currently dragged.
+  ///  * [selected]: Whether the widget is currently selected.
+  ///  * [disabled]: Whether the widget is currently disabled.
+  ///  * [indeterminate]: Whether the widget is currently indeterminate.
+  ///  * [error]: Whether the widget is currently in an error state.
+  ///  * [loading]: Whether the widget is currently loading.
+  ///  * [events]: A set of initial [WidgetEvent]s to set the controller's state with.
+  ///  * [onChanged]: A callback that will be invoked whenever the set of active events changes.
   WidgetEventController({
     bool focused = false,
     bool hovered = false,
@@ -35,8 +49,8 @@ class WidgetEventController extends ChangeNotifier with Diagnosticable {
           if (loading) WidgetEvent.loading,
         }..addAll(events ?? {});
 
-  /// Called when [value] changes.
-  final VoidCallback? onChanged;
+  /// Called whenever the set of active [WidgetEvent]s changes.
+  final ValueSetter<Set<WidgetEvent>>? onChanged;
 
   /// Managed set of active [WidgetEvent] values;
   /// designed to be passed to [DrivenProperty.resolve] methods.
@@ -147,7 +161,6 @@ class WidgetEventController extends ChangeNotifier with Diagnosticable {
   void add(WidgetEvent event) {
     if (value.add(event)) {
       notifyListeners();
-      onChanged?.call();
     }
   }
 
@@ -155,8 +168,17 @@ class WidgetEventController extends ChangeNotifier with Diagnosticable {
   void remove(WidgetEvent event) {
     if (value.remove(event)) {
       notifyListeners();
-      onChanged?.call();
     }
+  }
+
+  /// Updates the [value] set with a map of [WidgetEvent]s and their desired states.
+  ///
+  /// Events with a value of `true` in the map will be marked as active,
+  /// while events with a value of `false` will be removed from the set.
+  void update(Map<WidgetEvent, bool> registry) {
+    registry.removeWhere((key, value) => !value);
+    value = registry.keys.toSet();
+    notifyListeners();
   }
 
   /// Merge [value] with a new set of [WidgetEvent].
@@ -175,6 +197,12 @@ class WidgetEventController extends ChangeNotifier with Diagnosticable {
   void clear() {
     value.clear();
     notifyListeners();
+  }
+
+  @override
+  void notifyListeners() {
+    super.notifyListeners();
+    onChanged?.call(value);
   }
 
   @override
