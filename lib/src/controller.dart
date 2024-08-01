@@ -16,8 +16,8 @@ class WidgetEventController extends ChangeNotifier with Diagnosticable {
   /// Optionally allows setting the initial state of the events.
   ///  * [value]: The initial set of active [WidgetEvent]s. Defaults to an empty set.
   ///  * [onChanged]: A callback that will be invoked whenever the set of active events changes.
-  WidgetEventController({
-    Set<WidgetEvent> events = const {},
+  WidgetEventController(
+    Set<WidgetEvent> events, {
     this.onChanged,
   }) : value = events;
 

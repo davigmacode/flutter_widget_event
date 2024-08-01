@@ -85,7 +85,7 @@ mixin WidgetEventMixin<T extends StatefulWidget> on State<T> {
       _internalController?.dispose();
       _internalController = null;
     } else {
-      _internalController = WidgetEventController();
+      _internalController = WidgetEventController({});
     }
     widgetEvents.addListener(didChangeWidgetEvents);
   }
