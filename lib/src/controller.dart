@@ -14,26 +14,6 @@ class WidgetEventController extends ChangeNotifier with Diagnosticable {
   /// Creates a new instance of [WidgetEventController].
   ///
   /// Optionally allows setting the initial state of the events.
-  ///  * [value]: The initial set of active [WidgetEvent]s. Defaults to an empty set.
-  ///  * [onChanged]: A callback that will be invoked whenever the set of active events changes.
-  WidgetEventController(
-    Set<WidgetEvent> events, {
-    this.onChanged,
-  }) : value = events;
-
-  /// Creates a new instance of [WidgetEventController] based on a map of events.
-  ///
-  /// The map keys represent the [WidgetEvent]s and the map values represent
-  /// the desired active state for each event (true for active, false for inactive).
-  /// Events with a value of `false` in the map will be removed from the set.
-  WidgetEventController.reg(
-    Map<WidgetEvent, bool> registry, {
-    this.onChanged,
-  }) : value = (registry..removeWhere((key, value) => !value)).keys.toSet();
-
-  /// Creates a new instance of [WidgetEventController].
-  ///
-  /// Optionally allows setting the initial state of the events.
   ///  * [focused]: Whether the widget is currently focused.
   ///  * [hovered]: Whether the widget is currently hovered.
   ///  * [pressed]: Whether the widget is currently pressed.
@@ -43,31 +23,31 @@ class WidgetEventController extends ChangeNotifier with Diagnosticable {
   ///  * [indeterminate]: Whether the widget is currently indeterminate.
   ///  * [error]: Whether the widget is currently in an error state.
   ///  * [loading]: Whether the widget is currently loading.
+  ///  * [events]: A set of initial [WidgetEvent]s to set the controller's state with.
   ///  * [onChanged]: A callback that will be invoked whenever the set of active events changes.
-  WidgetEventController.by({
+  WidgetEventController({
     bool focused = false,
     bool hovered = false,
     bool pressed = false,
     bool dragged = false,
     bool selected = false,
-    bool indeterminate = false,
     bool disabled = false,
+    bool indeterminate = false,
     bool error = false,
     bool loading = false,
+    Set<WidgetEvent>? events,
     this.onChanged,
-  }) : value = ({
-          WidgetEvent.focused: focused,
-          WidgetEvent.hovered: hovered,
-          WidgetEvent.pressed: pressed,
-          WidgetEvent.dragged: dragged,
-          WidgetEvent.selected: selected,
-          WidgetEvent.indeterminate: indeterminate,
-          WidgetEvent.disabled: disabled,
-          WidgetEvent.error: error,
-          WidgetEvent.loading: loading,
-        }..removeWhere((key, value) => !value))
-            .keys
-            .toSet();
+  }) : value = <WidgetEvent>{
+          if (focused) WidgetEvent.focused,
+          if (hovered) WidgetEvent.hovered,
+          if (pressed) WidgetEvent.pressed,
+          if (dragged) WidgetEvent.dragged,
+          if (selected) WidgetEvent.selected,
+          if (indeterminate) WidgetEvent.indeterminate,
+          if (disabled) WidgetEvent.disabled,
+          if (error) WidgetEvent.error,
+          if (loading) WidgetEvent.loading,
+        }..addAll(events ?? {});
 
   /// Called whenever the set of active [WidgetEvent]s changes.
   final ValueSetter<Set<WidgetEvent>>? onChanged;
