@@ -1,3 +1,7 @@
+## 1.10.2
+
+* Fixed cannot change an unmodifiable set when create controller using default constructor
+
 ## 1.10.1
 
 * Fixed cannot change an unmodifiable set when create controller using default constructor
