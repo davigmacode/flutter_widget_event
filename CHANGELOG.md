@@ -1,3 +1,7 @@
+## 1.11.0
+
+* Revert to v1.9.0, v1.10.2 should be a breaking version
+
 ## 1.10.2
 
 * Fixed cannot change an unmodifiable set when create controller using default constructor
