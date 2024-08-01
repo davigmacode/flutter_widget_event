@@ -1,3 +1,8 @@
+## 1.10.0
+
+* Improved controller constructor
+* Improved mixin
+
 ## 1.9.0
 
 * Added method to update multiple events with a map of widget events
