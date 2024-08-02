@@ -89,10 +89,7 @@ class MyWidgetState extends State<MyWidget> with WidgetEventMixin<MyWidget> {
   @override
   void didUpdateWidget(covariant MyWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    updateWidgetEvents(
-      oldWidget.eventController,
-      widget.eventController,
-    );
+    updateWidgetEvents(widget.eventController);
   }
 
   @override
