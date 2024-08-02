@@ -1,3 +1,7 @@
+## 2.0.0
+
+* Improved controller and mixin
+
 ## 1.11.0
 
 * Revert to v1.9.0, v1.10.2 should be a breaking version
