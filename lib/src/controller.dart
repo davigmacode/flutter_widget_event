@@ -205,10 +205,19 @@ class WidgetEventController extends ChangeNotifier with Diagnosticable {
   ///
   /// Events with a value of `true` in the map will be marked as active,
   /// while events with a value of `false` will be removed from the set.
-  void update(Map<WidgetEvent, bool> registry) {
-    registry.removeWhere((key, value) => !value);
-    value = registry.keys.toSet();
-    notifyListeners();
+  void update(
+    Map<WidgetEvent, bool> registry, {
+    bool forceNotify = false,
+  }) {
+    int affected = 0;
+    registry.forEach((event, active) {
+      if (active) {
+        if (value.add(event)) affected++;
+      } else {
+        if (value.remove(event)) affected++;
+      }
+    });
+    if (affected > 0 || forceNotify) notifyListeners();
   }
 
   /// Merge [value] with a new set of [WidgetEvent].
