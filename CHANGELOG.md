@@ -1,3 +1,7 @@
+## 2.0.1
+
+* The controller update method now preserves widget event statuses not explicitly provided in the registry parameters
+
 ## 2.0.0
 
 * Improved controller and mixin
