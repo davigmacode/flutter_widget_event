@@ -1,3 +1,8 @@
+> [!IMPORTANT]
+> **Repository Relocation Notice**
+> Active development and maintenance of `widget_event` has moved to the unified **[flutter_wx monorepo](https://github.com/davigmacode/flutter_wx/tree/main/packages/widget_event)**.
+> This repository is now archived and preserved for historical reference. Please file issues, feature requests, and pull requests on the new monorepo.
+
 [![Pub Version](https://img.shields.io/pub/v/widget_event)](https://pub.dev/packages/widget_event) ![GitHub](https://img.shields.io/github/license/davigmacode/flutter_widget_event) [![GitHub](https://badgen.net/badge/icon/buymeacoffee?icon=buymeacoffee&color=yellow&label)](https://www.buymeacoffee.com/davigmacode) [![GitHub](https://badgen.net/badge/icon/ko-fi?icon=kofi&color=red&label)](https://ko-fi.com/davigmacode)
 
 Just like MaterialState but with convenient name and more spices.
